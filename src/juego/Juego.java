@@ -167,7 +167,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         sndSonidoJuego = new SoundClip("SmokingPot.wav");
         
         //Cancion para el juego
-        sndBarra = new SoundClip("SmokingPot.wav");
+        sndBarra = new SoundClip("sndBarra.wav");
         
         //Cancion para el juego
         sndBreak = new SoundClip("SmokingPot.wav");
@@ -182,9 +182,12 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         //Score inicial
         iScore = 0;
         iNivel = 1;
+        iVidas = 4;
         
         //Llamo al metodo reiniciar variables, en la que se declaran los valores iniciales
         reiniciarVariables();
+        
+        bMenu = true;
         
         //Implemento el Key Listener
         addKeyListener(this);
@@ -201,6 +204,9 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         
         while (true) {
         
+            
+            while(iVidas > 0){
+           
             //Para poner la musica
             if (themeCont <= 0) {
                 if (changeSong % 2 == 0) {
@@ -214,8 +220,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             }
             themeCont--;
         
-            while(iVidas > 0){
-           
+                
             //Si no has perdido el juego
             if(!bPerdiste){
                 //Si no esta la pausa habilitada
@@ -307,7 +312,9 @@ public class Juego extends JFrame implements Runnable, KeyListener{
                 //Si ya perdio todas las vidas se acaba el juego
                 if(iVidas == 1){
                     bPerdiste = true;
+                    iNivel = 1;
                     reiniciarVariables();
+                    iVidas = 4;
                 }
             }
         }
@@ -340,6 +347,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         if(objBomba.colisiona(objBarra)){
             //Rebota con la barra y cambia la direccion de Y
             iMoveY = -iMoveY;
+            sndBarra.play();
         }
         
         /*
@@ -400,10 +408,42 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             }
         }
         
-        if(iContP == 36){
-            bGanaste = true;
-            //iNivel++;
-            reiniciarVariables();
+        switch(iNivel){
+            case 1:{
+                if(iContP == 9){
+                    iNivel++;
+                    reiniciarVariables();
+                    bStart = true;
+                }
+            }
+            case 2:{
+                if(iContP == 16){
+                    iNivel++;
+                    reiniciarVariables();
+                    bStart = true;
+                }
+            }
+            case 3:{
+                if(iContP == 25){
+                    iNivel++;
+                    reiniciarVariables();
+                    bStart = true;
+                }
+            }
+            case 4:{
+                if(iContP == 25){
+                    iNivel++;
+                    reiniciarVariables();
+                    bStart = true;
+                }
+            }
+            case 5:{
+                if(iContP == 36){
+                    bGanaste = true;
+                    reiniciarVariables();
+                    bStart = true;
+                }
+            }
         }
     }
     
@@ -428,12 +468,12 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             //Si se solto en la mitad izquierda de la pantalla, sale hacia la izquierda
             if(objBomba.getX() < 500){
                 iMoveX = -5;
-                iMoveY = -5;
+                iMoveY = 5;
             }
             //Si se solto en la mitad derecha de la pantalla, sale hacia la derecha
             else if(objBomba.getX() >= 500){
                 iMoveX = 5;
-                iMoveY = -5;
+                iMoveY = 5;
             }
         }
         //El juego se cierra si se presiona la tecla E
@@ -448,6 +488,8 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             bPerdiste = false;
             bGanaste = false;
             iScore = 0;
+            iVidas = 4;
+            iNivel = 1;
         }
         //Se despliegan las instrucciones si se presiona I
         if(keyEvent.getKeyCode() == KeyEvent.VK_I){
@@ -602,7 +644,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         
         
         //Inicializo booleans
-        bMenu = true; //Para ver si esta activo el menu
+        bMenu = false; //Para ver si esta activo el menu
         bInst = false; //Para ver si esta activa la ventana de instrucciones
         bStart = false; //Para ver si ya que inicio el juego
         bPausa = false; //Para ver si el juego esta en pausa
@@ -621,14 +663,12 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         //Velocidad de la barra
         iVelocidad = 15;
         
+        //Variable para contar los personajes colisionados
         iContP = 0;
-        
-        //Inicializo con 4 vidas
-        iVidas = 4;
         
         //Posicion inicial de la bomba
         iXBomb = getWidth()/2 - 25;
-        iYBomb = getHeight() - 65;
+        iYBomb = getHeight() - 71;
         
         //Posicion de la barra
         iXBarra = getWidth() / 2 - 75;
@@ -639,20 +679,20 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         objBarra = new Objeto(iXBarra, iYBarra, imgBarra);
         
         if(iNivel == 1){
-            for (int iY = 0; iY < 6; iY++){
+            for (int iY = 0; iY < 3; iY++){
 
-                for (int iX = 0; iX < 11 - (iY * 2); iX++){
-                    //Inicializo las posiciones de los caminadores
-                    iYPer = 100 + (iY * 53); //Que salgan del lado izquierdo
-                    iXPer = 225 + (iX * 50) + (iY * 53);
+                for (int iX = 0; iX < 5 - (iY * 2); iX++){
+                    //Inicializo las posiciones de los Jesses
+                    iYPer = 100 + (iY * 106); 
+                    iXPer = 225 + (iX * 100) + (iY * 106);
 
                     // se crea el Objeto
-                    objPersonaje = new Objeto(iXPer, iYPer, imgHeisenberg);
+                    objPersonaje = new Objeto(iXPer, iYPer, imgJesse);
 
                     //Guardo el objeto en la lista
                     //lnkPersonajes.add(objWhite);
 
-                    if(iCont < 36){
+                    if(iCont < 9){
                         objPersonajes[iCont] = objPersonaje;
                     }
                     iCont++;
@@ -660,6 +700,69 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             }
         }
         else if(iNivel == 2){
+            for (int iY = 0; iY < 4; iY++){
+
+                for (int iX = 0; iX < 7 - (iY * 2); iX++){
+                    //Inicializo las posiciones de los caminadores
+                    iYPer = 100 + (iY * 85); //Que salgan del lado izquierdo
+                    iXPer = 225 + (iX * 80) + (iY * 85);
+
+                    // se crea el Objeto
+                    objPersonaje = new Objeto(iXPer, iYPer, imgWhite);
+
+                    //Guardo el objeto en la lista
+                    //lnkPersonajes.add(objWhite);
+
+                    if(iCont < 16){
+                        objPersonajes[iCont] = objPersonaje;
+                    }
+                    iCont++;
+                }
+            }
+        }
+        else if(iNivel == 3){
+            for (int iY = 0; iY < 5; iY++){
+
+                for (int iX = 0; iX < 9 - (iY * 2); iX++){
+                    //Inicializo las posiciones de los caminadores
+                    iYPer = 100 + (iY * 64); //Que salgan del lado izquierdo
+                    iXPer = 225 + (iX * 60) + (iY * 64);
+
+                    // se crea el Objeto
+                    objPersonaje = new Objeto(iXPer, iYPer, imgMike);
+
+                    //Guardo el objeto en la lista
+                    //lnkPersonajes.add(objWhite);
+
+                    if(iCont < 25){
+                        objPersonajes[iCont] = objPersonaje;
+                    }
+                    iCont++;
+                }
+            }
+        }
+        else if(iNivel == 4){
+            for (int iY = 0; iY < 5; iY++){
+
+                for (int iX = 0; iX < 9 - (iY * 2); iX++){
+                    //Inicializo las posiciones de los caminadores
+                    iYPer = 100 + (iY * 64); //Que salgan del lado izquierdo
+                    iXPer = 225 + (iX * 60) + (iY * 64);
+
+                    // se crea el Objeto
+                    objPersonaje = new Objeto(iXPer, iYPer, imgMike);
+
+                    //Guardo el objeto en la lista
+                    //lnkPersonajes.add(objWhite);
+
+                    if(iCont < 25){
+                        objPersonajes[iCont] = objPersonaje;
+                    }
+                    iCont++;
+                }
+            }
+        }
+        else if(iNivel == 5){
             for (int iY = 0; iY < 6; iY++){
 
                 for (int iX = 0; iX < 11 - (iY * 2); iX++){
@@ -668,7 +771,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
                     iXPer = 225 + (iX * 50) + (iY * 53);
 
                     // se crea el Objeto
-                    objPersonaje = new Objeto(iXPer, iYPer, imgWhite);
+                    objPersonaje = new Objeto(iXPer, iYPer, imgMike);
 
                     //Guardo el objeto en la lista
                     //lnkPersonajes.add(objWhite);
