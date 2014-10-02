@@ -110,6 +110,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
     private int iNivel;
     private int themeCont;
     private int changeSong;
+    private int iBombaCont = 0;
     
     //Declaro mi arreglo para guardar objetos del tipo Objeto (Mr.White)
     private Objeto [] objPersonajes;
@@ -228,10 +229,8 @@ public class Juego extends JFrame implements Runnable, KeyListener{
                     //Si no se esta mostrando el menu y ya se inicio el juego
                     if(!bInst && bStart){
                         actualiza();
-                        //Si ya se solto la bomba
-                        if(bBomba){
-                            checaColision();
-                        }
+                        checaColision();
+                        
                     }
                 }
             }
@@ -464,16 +463,19 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         if(keyEvent.getKeyCode() == KeyEvent.VK_SPACE){
             //Se suelta la bomba y ya no se mueve con la barra
             bBomba = true;
+            iBombaCont++;
             
             //Si se solto en la mitad izquierda de la pantalla, sale hacia la izquierda
-            if(objBomba.getX() < 500){
-                iMoveX = -5;
-                iMoveY = 5;
-            }
-            //Si se solto en la mitad derecha de la pantalla, sale hacia la derecha
-            else if(objBomba.getX() >= 500){
-                iMoveX = 5;
-                iMoveY = 5;
+            if(iBombaCont == 1) {
+                if(objBomba.getX() < 500){
+                    iMoveX = -5;
+                    iMoveY = 5;
+                }
+                //Si se solto en la mitad derecha de la pantalla, sale hacia la derecha
+                else if(objBomba.getX() >= 500){
+                    iMoveX = 5;
+                    iMoveY = 5;
+                }
             }
         }
         //El juego se cierra si se presiona la tecla E
@@ -649,6 +651,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         bStart = false; //Para ver si ya que inicio el juego
         bPausa = false; //Para ver si el juego esta en pausa
         bBomba = false; //Para ver si ya se solto la bomba
+        iBombaCont = 0; 
         
         //Variable que determina la direccion de la barra y la bomba
         iDireccion = 0;
