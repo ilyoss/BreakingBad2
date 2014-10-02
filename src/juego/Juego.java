@@ -444,8 +444,10 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             case 5:{
                 if(iContP == 36){
                     bGanaste = true;
-                    reiniciarVariables();
-                    bStart = true;
+                    iNivel = 1;
+                    reiniciarVariables();  
+                    iVidas = 4;
+                    bStart = true;                   
                 }
             }
         }
