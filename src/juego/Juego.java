@@ -46,6 +46,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
     private SoundClip sndSonidoJuego;
     private SoundClip sndBarra;
     private SoundClip sndBreak;
+    private SoundClip sndColision;
     
     //Declaracion de imagenes
     private Image imgPaused; //Variable para la imagen de pausa
@@ -171,7 +172,9 @@ public class Juego extends JFrame implements Runnable, KeyListener{
         sndBarra = new SoundClip("sndBarra.wav");
         
         //Cancion para el juego
-        sndBreak = new SoundClip("SmokingPot.wav");
+        sndBreak = new SoundClip("shing.wav");
+        sndColision = new SoundClip("bomb.wav");
+        
         
         //Inicializo en falso el perder y ganar
         bGanaste = false;
@@ -306,6 +309,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
             //Si la bomba toca el piso, se pierde una vida
             if(objBomba.getY() >= getHeight() - objBomba.getAlto()){
                 iVidas--;
+                sndColision.play();
                 iMoveY = -iMoveY;
                 
                 //Si ya perdio todas las vidas se acaba el juego
@@ -403,6 +407,7 @@ public class Juego extends JFrame implements Runnable, KeyListener{
                     iScore+=100;
                     objPersonajes[iI] = null;
                     iContP++;
+                    sndBreak.play();
                 }
             }
         }
